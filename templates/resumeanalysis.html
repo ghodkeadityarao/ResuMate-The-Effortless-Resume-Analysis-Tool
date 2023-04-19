@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block textbox %}
+        <!-- sidebar-wrapper  -->
+        <div class="page-content">
+          <div class="container-fluid">
+            <h4 style="color:rgba(129, 98, 213, 0.766)">Welcome to your resume review...</h4><br><br>
+            <div class="row">
+              <div class="form-group col-md-12">
+                <div class="containercolor">
+                  <ul>
+                  <li>Your resume score is {{tot}} out of 100</li>
+                  <hr>
+                  <li style="font-size: 20px;">
+                    {{txt}}
+                  </li><br>
+                  <li style="font-size: 20px;">
+                    Check score board for detailed review and improvements
+                  </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- page-content" -->
+      <!-- page-wrapper -->
+   
+
+{% endblock textbox %}  

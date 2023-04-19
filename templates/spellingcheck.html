@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block textbox %}
+        <!-- sidebar-wrapper  -->
+        <div class="page-content">
+          <div class="container-fluid">
+            <h4>Spelling Check</h4><br><br>
+            <div class="row">
+              <div class="form-group col-md-12">
+                <div class="containercolor">
+                  <ul>
+                  <li>Your resume score is {{marks}}/5</li>
+                  <hr>
+                  <li style="font-size: 17px;">
+                    Spelling mistakes in a resume can create a negative impression on potential employers and may suggest that the candidate lacks attention to detail.                  </li>
+                  <li style="font-size: 17px;">
+                    To reduce the risk of spelling mistakes, it's important to take steps to proofread and edit your resume carefully before submitting it.                  </li>
+                  <li style="font-size: 17px;">
+                    Here are some tips for reducing spelling mistakes in your resume:
+                    <p style="font-size: 15px;">1. Use a spell checker</p>
+                    <p style="font-size: 15px;">2. Review your resume carefully</p>
+                    <p style="font-size: 15px;">3. Use professional language</li>
+                  </li>
+                  <li>
+                    Here's an example of a spelling mistake in a resume:
+                  </li>
+                  <hr>
+                  <li style="font-size: 17px;"><b>Incorrect:</b> I was responsibl for leading a teem of employees to complet projekts on time.</li>
+                  <li style="font-size: 17px;"><b>Corrected:</b> I was responsible for leading a team of employees to complete projects on time.</li>
+                  </ul>  
+                </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- page-content" -->
+      <!-- page-wrapper -->
+{% endblock textbox %}  

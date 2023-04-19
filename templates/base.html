@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>ResuMate - The Effortless Resume Evaluation Tool</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="{{ url_for('static', filename='img/favicon.png') }}" rel="icon">
+  <link href="{{ url_for('static', filename='img/apple-touch-icon.png') }}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+
+  <link href="{{ url_for('static', filename='vendor/aos/aos.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='vendor/remixicon/remixicon.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+  <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+  <link rel=“stylesheet” href=“https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css” integrity=“sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l” crossorigin=“anonymous”>
+  
+  <!--  Main CSS File -->
+  <link href="{{ url_for('static', filename='css/resana.css') }}" rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top">
+    <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
+
+      <a href="index.html" class="logo d-flex align-items-center">
+        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="">
+        <span>ResuMate</span>
+      </a>
+
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a class="nav-link scrollto active" href="/">Home</a></li>
+          <li><a class="nav-link scrollto" href="/">About</a></li>
+          <li><a class="nav-link scrollto" href="/">Services</a></li>
+          <li><a class="nav-link scrollto" href="/">Team</a></li>
+          <li><a class="nav-link scrollto" href="/">Contact</a></li>
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav><!-- .navbar -->
+    </div>
+  </header><!-- End Header -->
+
+  <main id="main">
+    <div class="containerana">
+      <div class="page-wrapper chiller-theme toggled">
+        <a id="show-sidebar" class="btn btn-sm btn-dark" href="#">
+          <i class="fas fa-bars"></i>
+        </a>
+        <nav id="sidebar" class="sidebar-wrapper">
+          <div class="sidebar-content">
+            <div class="sidebar-brand">
+              <a href="/resumeanalysis">Score Board</a>
+            </div>
+
+            <div class="sidebar-header">
+              <div class="circular-progress" data-inner-circle-color="white" data-percentage="{{tot}}" data-progress-color="DodgerBlue" data-bg-color="black">
+                <div class="inner-circle"></div>
+                <p class="percentage">0%</p>
+              </div>
+            </div>
+
+            <div class="sidebar-menu">
+              <ul>
+                <li class="sidebar-dropdown">
+                  <a href="#">
+                    <i class="fa fa-tachometer-alt"></i>
+                    <span>Impact</span>
+                    <span class="badge badge-pill badge-warning">{{imp}}</span>
+                  </a>
+                  <div class="sidebar-submenu">
+                    <ul>
+                      <li>
+                        <a href="/quantify_impact">Quantify Impact</a>
+                      </li>
+                      <li>
+                        <a href="/repetition">Repetition</a>
+                      </li>
+                      <li>
+                        <a href="/verbs">Repeating Verbs</a>
+                      </li>
+                      <li>
+                        <a href="/spellingcheck">Spelling Check</a>
+                      </li>
+                      <li>
+                        <a href="/actionverbs">Weak Action Verbs</a>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+                <li class="sidebar-dropdown">
+                  <a href="#">
+                    <i class="fa fa-shopping-cart"></i>
+                    <span>Brevity</span>
+                    <span class="badge badge-pill badge-danger">{{bre}}</span>
+                  </a>
+                  <div class="sidebar-submenu">
+                    <ul>
+                      <li>
+                        <a href="/resumelength">Resume Length</a>
+                      </li>
+                      <li>
+                        <a href="/bulletpoints">Bullet Points</a>
+                      </li>
+                      <li>
+                        <a href="/fillerwords">Filler Words</a>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+                <li class="sidebar-dropdown">
+                  <a href="#">
+                    <i class="far fa-gem"></i>
+                    <span>Style</span>
+                    <span class="badge badge-pill badge-danger">{{sty}}</span>
+                  </a>
+                  <div class="sidebar-submenu">
+                    <ul>
+                      <li>
+                        <a href="/buzzwords">Buzzwords</a>
+                      </li>
+                      <li>
+                        <a href="/dates">Dates</a>
+                      </li>
+                      <li>
+                        <a href="/personaldetails">Personal Details</a>
+                      </li>
+                      <li>
+                        <a href="/personalpronouns">Personal Pronouns</a>
+                      </li>
+                      <li>
+                        <a href="/passivevoices">Passive Voices</a>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+                <li class="sidebar-dropdown">
+                  <a href="#">
+                    <i class="fa fa-chart-line"></i>
+                    <span>Sections</span>
+                    <span class="badge badge-pill badge-danger">{{sec}}</span>
+                  </a>
+                  <div class="sidebar-submenu">
+                    <ul>
+                      <li>
+                        <a href="/experience">Experience</a>
+                      </li>
+                      <li>
+                        <a href="/education">Education</a>
+                      </li>
+                      <li>
+                        <a href="/summary">Summary</a>
+                      </li>
+                      <li>
+                        <a href="/skills">Skills</a>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <!-- sidebar-menu  -->
+          </div>
+          <!-- sidebar-content  -->
+          <div class="sidebar-footer">
+            <li>
+              <a href="#">Check Review</a>
+            </li>
+          </div>
+        </nav>
+      </div>
+    </div>
+
+        {% block textbox %}
+            
+        {% endblock textbox %}    
+
+      <!-- page-wrapper -->
+    <iframe src="static/pdf/{{resumeName}}#toolbar=0" id="Iframe"> </iframe>
+      
+  </main><!-- End #main -->                      
+
+  <!-- Vendor JS Files -->
+  <script src="{{ url_for('static', filename='vendor/isotope-layout/isotope.pkgd.min.js')}}"></script>
+  <script src="{{ url_for('static', filename='vendor/purecounter/purecounter_vanilla.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/aos/aos.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/glightbox/js/glightbox.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/swiper/swiper-bundle.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/php-email-form/validate.js') }}"></script>
+
+  <!-- Template Main JS File -->
+  <script src="{{ url_for('static', filename='js/ana.js')}}"></script>
+</body>
+</html>

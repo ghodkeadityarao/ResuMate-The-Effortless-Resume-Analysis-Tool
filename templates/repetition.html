@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block textbox %}
+        <!-- sidebar-wrapper  -->
+        <div class="page-content">
+          <div class="container-fluid">
+            <h4>Repetition of Sentences</h4><br><br>
+            <div class="row">
+              <div class="form-group col-md-12">
+                <div class="containercolor">
+                  <ul>
+                  <li>Your resume score is {{marks}}/5</li>
+                  <hr>
+                  <li style="font-size: 15px;">
+                    It is important to use a variety of action verbs and sentence structures to describe your experiences and achievements.                  </li>
+                  <li style="font-size: 15px;">
+                    This can help to keep your resume engaging and easy to read, while also showcasing your versatility as a candidate.                  </li>
+                  <br>
+                  <li>
+                    Here's an example:
+                  </li>
+                  <hr>
+                  <p style="font-size: 19px;">
+                    <b>Repetitive:</b>
+                    <li style="font-size: 15px;">Managed a team of 10 employees, overseeing their daily activities and providing feedback.</li>
+                      <li style="font-size: 15px;">Managed budget and expenses for department.</li>
+                        <li style="font-size: 15px;">Managed project timelines and deliverables.   </li>            
+                  </p>
+                  <p style="font-size: 19px;">
+                    <b>Varied:</b>
+                    <li style="font-size: 15px;">Led a team of 10 employees, providing coaching and feedback to optimize performance.</li>
+                      <li style="font-size: 15px;">Monitored department budget and expenses to ensure adherence to financial goals.</li>
+                        <li style="font-size: 15px;"> Coordinated project timelines and deliverables to ensure timely completion.       </li>   
+                  </p>
+                  <br><li>
+                    RESULT OF YOUR RESUME:
+                  </li><hr>
+                  <p>{{opt}}</p>
+                  {%for i in range(0, l)%}
+                  <li style="font-size: 17px;">{{vrbs[i]}}</li>
+                  {%endfor%}
+                  </ul>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- page-content" -->
+      <!-- page-wrapper -->
+{% endblock textbox %}  

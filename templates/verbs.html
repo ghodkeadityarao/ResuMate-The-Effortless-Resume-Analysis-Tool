@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block textbox %}
+        <!-- sidebar-wrapper  -->
+        <div class="page-content">
+          <div class="container-fluid">
+            <h4>Repetition of Verbs</h4><br><br>
+            <div class="row">
+              <div class="form-group col-md-12">
+                <div class="containercolor">
+                  <ul>
+                  <li>Your resume score is {{marks}}/5</li>
+                  <hr>
+                  <li style="font-size: 15px;">
+                    Repetitive verbs in a resume can make it seem monotonous and unengaging, potentially reducing its effectiveness in grabbing the attention of potential employers.                  </li>
+                  <li style="font-size: 15px;">
+                    To reduce the repetition of verbs in a resume, it's important to use a variety of action verbs and synonyms to describe your experiences and achievements.                  </li>
+                  <br>
+                  <li>
+                    Here's an example of how to quantify impact in a resume:
+                  </li>
+                  <hr>
+                  <p style="font-size: 19px;">
+                    <b>Repetitive:</b>
+                    <li style="font-size: 15px;">Managed a team of 5 employees.</li>
+                      <li style="font-size: 15px;">Managed budget and expenses for department.</li>
+                  </p>
+                  <p style="font-size: 19px;">
+                    <b>Varied:</b>
+                    <li style="font-size: 15px;">Led a team of 5 employees to achieve project goals.</li>
+                      <li style="font-size: 15px;">Oversaw department budget and expenses to ensure financial efficiency.</li>
+                  </p>
+                  <br><li>
+                    RESULT OF YOUR RESUME:
+                  </li><hr>
+                  <p>{{opt}}</p>
+                  {%for i in range(0, l)%}
+                  <li style="font-size: 17px;">{{vrbs[i]}}</li>
+                  {%endfor%}
+                  </ul>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- page-content" -->
+      <!-- page-wrapper -->
+{% endblock textbox %}  

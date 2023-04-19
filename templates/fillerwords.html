@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block textbox %}
+        <!-- sidebar-wrapper  -->
+        <div class="page-content">
+          <div class="container-fluid">
+            <h4>Filler Words</h4><br><br>
+            <div class="row">
+              <div class="form-group col-md-12">
+                <div class="containercolor">
+                  <ul>
+                  <li>Your resume score is {{marks}}/7</li>
+                  <hr>
+                  <li style="font-size: 15px;">
+                    Filler words are unnecessary words or phrases that can weaken the impact and effectiveness of a resume.                  </li>
+                  <li style="font-size: 15px;">
+                    Examples of filler words include "very," "quite," "really," and "just."                  </li>
+                  <li style="font-size: 15px;">
+                    Instead of using filler words, it's important to focus on using strong action verbs and specific details to highlight your achievements and qualifications.                  </li><br>
+                  <li>
+                    Here's an example:
+                  </li>
+                  <hr>
+                  <li style="font-size: 17px;"><b>Before:</b> I was just responsible for managing a team of 5</li>
+                  <li style="font-size: 17px;"><b>After:</b> I successfully managed a team of 5, resulting in a 25% increase in productivity.</li>
+                  <br><li>
+                    RESULT OF YOUR RESUME:
+                  </li><hr>
+                  <p>{{opt}}</p>
+                  {%for i in range(0, l)%}
+                  <li style="font-size: 17px;">{{vrbs[i]}}</li>
+                  {%endfor%}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- page-content" -->
+      <!-- page-wrapper -->
+{% endblock textbox %}  

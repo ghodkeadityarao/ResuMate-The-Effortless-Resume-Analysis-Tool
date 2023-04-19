@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block textbox %}
+        <!-- sidebar-wrapper  -->
+        <div class="page-content">
+          <div class="container-fluid">
+            <h4>Weak Action Verbs</h4><br><br>
+            <div class="row">
+              <div class="form-group col-md-12">
+                <div class="containercolor">
+                  <ul>
+                  <li>Your resume score is {{marks}}/5</li>
+                  <hr>
+                  <li style="font-size: 15px;">
+                    Using weak action verbs in a resume can make it seem less impactful and may not accurately reflect your achievements and responsibilities.                  </li>
+                  <li style="font-size: 15px;">
+                    To reduce the use of weak action verbs in a resume, it's important to choose strong and specific verbs that accurately describe your experiences and accomplishments.                  </li>
+                  <br>
+                  <li>
+                    Here's an example of how to correct weak action verbs in a resume:
+                  </li>
+                  <hr>
+                  <li style="font-size: 17px;"><b>Before:</b> Assisted in the development of marketing campaigns.</li>
+                  <li style="font-size: 17px;"><b>After:</b> Collaborated with the marketing team to develop and execute targeted campaigns that increased sales by 15%.</li>
+                  <br>
+                  <li>
+                    RESULT OF YOUR RESUME:
+                  </li><hr>
+                  <p>{{opt}}</p>
+                  {%for i in range(0, l)%}
+                  <li style="font-size: 17px;">{{vrbs[i]}}</li>
+                  {%endfor%}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- page-content" -->
+      <!-- page-wrapper -->
+{% endblock textbox %}  

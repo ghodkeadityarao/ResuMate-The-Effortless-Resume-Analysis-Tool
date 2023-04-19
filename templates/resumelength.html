@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block textbox %}
+        <!-- sidebar-wrapper  -->
+        <div class="page-content">
+          <div class="container-fluid">
+            <h4>Resume Length</h4><br><br>
+            <div class="row">
+              <div class="form-group col-md-12">
+                <div class="containercolor">
+                  <ul>
+                  <li>Your resume score is {{marks}}/8</li>
+                  <hr>
+                  <li style="font-size: 15px;">
+                    For individuals with extensive experience or specialized qualifications, a two-page resume may be appropriate.                  </li>
+                    <li style="font-size: 15px;">
+                      The perfect and recommended resume length is between 475 and 600 words.                  </li>
+                    <br>
+                  <li>
+                    Your resume length is:{{l}}
+                  </li>
+                  <hr>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- page-content" -->
+      <!-- page-wrapper -->
+{% endblock textbox %}  

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block textbox %}
+        <!-- sidebar-wrapper  -->
+        <div class="page-content">
+          <div class="container-fluid">
+            <h4>Buzzwords</h4><br><br>
+            <div class="row">
+              <div class="form-group col-md-12">
+                <div class="containercolor">
+                  <ul>
+                  <li>Your resume score is {{marks}}/5</li>
+                  <hr>
+                  <li style="font-size: 15px;">
+                    Buzzwords are words or phrases that have become popular in certain industries or job fields, but may not actually add any value to your resume.                  </li>
+                  <li style="font-size: 15px;">
+                    Examples of buzzwords include "synergy," "team player," "results-driven," and "go-getter."
+                  </li>
+                  <li style="font-size: 15px;">
+                    Overuse of these words can make your resume sound generic and impersonal, and may not effectively communicate your specific skills and experiences.                  </li><br>
+                  <li>
+                    Here's an example of how correct buzzwords in a resume:
+                  </li>
+                  <hr>
+                  <li style="font-size: 17px;"><b>Before:</b> I'm a results-driven team player</li>
+                  <li style="font-size: 17px;"><b>After:</b> I successfully led a team of 10 to exceed quarterly sales targets by 15% through strategic planning and effective communication.</li>
+                  <br>
+                  <li>
+                    RESULT OF YOUR RESUME:
+                  </li><hr>
+                  <p>{{opt}}</p>
+                  {%for i in range(0, l)%}
+                  <li style="font-size: 17px;">{{vrbs[i]}}</li>
+                  {%endfor%}  
+                </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- page-content" -->
+      <!-- page-wrapper -->
+{% endblock textbox %}  

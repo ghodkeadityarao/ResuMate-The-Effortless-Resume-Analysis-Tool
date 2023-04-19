@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block textbox %}
+        <!-- sidebar-wrapper  -->
+        <div class="page-content">
+          <div class="container-fluid">
+            <h4>Personal Pronouns</h4><br><br>
+            <div class="row">
+              <div class="form-group col-md-12">
+                <div class="containercolor">
+                  <ul>
+                  <li>Your resume score is {{marks}}/5</li>
+                  <hr>
+                  <li style="font-size: 15px;">
+                    Personal pronouns, such as "I," "me," and "my," are generally not used in resumes.                  </li>
+                  <li style="font-size: 15px;">
+                    This is because resumes should be written in a professional, objective tone that focuses on your skills, experiences, and achievements rather than on your personal characteristics.                  </li>
+                  <br>
+                  <li>
+                    Here's an example:
+                  </li>
+                  <hr>
+                  <li style="font-size: 17px;"><b>Before:</b> I managed a team of 10 employees</li>
+                  <li style="font-size: 17px;"><b>After:</b> Managed team of 10 employees</li>
+                  <br><li>
+                    RESULT OF YOUR RESUME:
+                  </li><hr>
+                  <p>{{opt}}</p>
+                  {%for i in range(0, l)%}
+                  <li style="font-size: 17px;">{{vrbs[i]}}</li>
+                  {%endfor%}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- page-content" -->
+      <!-- page-wrapper -->
+{% endblock textbox %}  

@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block textbox %}
+        <!-- sidebar-wrapper  -->
+        <div class="page-content">
+          <div class="container-fluid">
+            <h4>Passive Voices</h4><br><br>
+            <div class="row">
+              <div class="form-group col-md-12">
+                <div class="containercolor">
+                  <ul>
+                  <li>Your resume score is {{marks}}/5</li>
+                  <hr>
+                  <li style="font-size: 15px;">
+                    The use of passive voice in a resume is generally discouraged, as it can make your achievements and contributions sound less impressive and may cause your resume to come across as weak or unclear.                  </li>
+                  <li style="font-size: 15px;">
+                    Passive voice refers to sentences in which the subject of the sentence is receiving the action, rather than performing it.                  </li>
+                  <br>
+                  <li>
+                    Here's an example of how to use passive voices in a resume:
+                  </li>
+                  <hr>
+                  <li style="font-size: 17px;"><b>Before:</b> The team completed the project</li>
+                  <li style="font-size: 17px;"><b>After:</b> The project was completed by the team</li>
+                  <br><li>
+                    RESULT OF YOUR RESUME:
+                  </li><hr>
+                  <p>{{opt}}</p>
+                  {%for i in range(0, l)%}
+                  <li style="font-size: 17px;">{{vrbs[i]}}</li>
+                  {%endfor%}  
+                </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- page-content" -->
+      <!-- page-wrapper -->
+{% endblock textbox %}  

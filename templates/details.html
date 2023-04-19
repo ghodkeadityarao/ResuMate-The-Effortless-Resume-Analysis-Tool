@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block textbox %}
+        <!-- sidebar-wrapper  -->
+        <div class="page-content">
+          <div class="container-fluid">
+            <h4>Personal Details</h4><br><br>
+            <div class="row">
+              <div class="form-group col-md-12">
+                <div class="containercolor">
+                  <ul>
+                  <li>Your resume score is {{marks}}/5</li>
+                  <hr>
+                  <li style="font-size: 15px;">
+                    Personal details, such as your name, contact information, and location, are essential components of a resume.                  </li>
+                  <li style="font-size: 15px;">
+                    It allows potential employers to easily reach out to you and determine if you are a good fit for the position and company.                  </li>
+                  <li style="font-size: 15px;">
+                    Whether you are highlighting a successful project or a significant increase in sales, quantifying impact in your resume can help you stand out from the crowd and demonstrate your potential as a valuable asset to any organization.
+                  </li>
+                  <li style="font-size: 15px;">
+                  When including personal details on your resume, it's important to make sure that they are accurate and up-to-date.
+                </li>
+                <br><li>
+                  RESULT OF YOUR RESUME:
+                </li><hr>
+                <p>{{opt}}</p>
+                </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- page-content" -->
+      <!-- page-wrapper -->
+{% endblock textbox %}  
