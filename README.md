@@ -18,6 +18,6 @@ So, we took the responsibility of solving our own problems.
 Here is the view of the app:
 
 
-![Screenshot 2023-04-18 231142](https://user-images.githubusercontent.com/99025242/233205972-5b4fee98-39ec-40d0-8785-cf4f189c175d.png)
 ![Screenshot 2023-04-19 233019](https://user-images.githubusercontent.com/99025242/233205982-dd8082dd-3758-4a40-9b55-75c1aea8b386.png)
 ![Screenshot 2023-04-19 233113](https://user-images.githubusercontent.com/99025242/233205991-6108e1b2-2ee8-4750-89bb-bf1a9fe66a31.png)
+![Screenshot 2023-04-18 231142](https://user-images.githubusercontent.com/99025242/233205972-5b4fee98-39ec-40d0-8785-cf4f189c175d.png)
