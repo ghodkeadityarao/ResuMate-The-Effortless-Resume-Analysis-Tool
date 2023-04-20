@@ -4,7 +4,7 @@ from werkzeug.utils import secure_filename
 from jobdescription import getJob
 from extraction_score import *
 from skill_show import *
-# from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static/pdf'
@@ -38,17 +38,17 @@ app.config['Section'] = None
 app.config['total'] = None
 app.config['summary1'] = None
 
-# with app.app_context():
-#     db = SQLAlchemy(app)
+with app.app_context():
+    db = SQLAlchemy(app)
 
-# class Details(db.Model):
-#     sno = db.Column(db.Integer, primary_key=True)
-#     UserName = db.Column(db.String(45), nullable=False)
-#     Email_Address = db.Column(db.String(45), nullable=False)
-#     Password = db.Column(db.String(45), nullable=False)
+class Details(db.Model):
+    sno = db.Column(db.Integer, primary_key=True)
+    UserName = db.Column(db.String(45), nullable=False)
+    Email_Address = db.Column(db.String(45), nullable=False)
+    Password = db.Column(db.String(45), nullable=False)
 
-#     def __repr__(self) -> str:
-#         return f"{self.sno} - {self.UserName}"
+    def __repr__(self) -> str:
+        return f"{self.sno} - {self.UserName}"
 
 @app.route('/')
 def hello_world():
@@ -56,13 +56,13 @@ def hello_world():
 
 @app.route('/loginpage', methods=['GET', 'POST'])
 def login():
-    # if (request.method == 'post'):
-    #     uname = request.form.get('uname')
-    #     email = request.form.get('email')
-    #     password = request.form.get('pass')
-    #     entry = Details(UserName=uname, Email_Address = email, Password = password)
-    #     db.session.add(entry)
-    #     db.session.commit()
+    if (request.method == 'POST'):
+        uname = request.form['uname']
+        email = request.form['email']
+        pass1 = request.form['pass']
+        dt = Details(UserName=uname, Email_Address=email, Password=pass1)
+        db.session.add(dt)
+        db.session.commit()
     return render_template('loginpage.html')
 
 @app.route('/start', methods=['GET', 'POST'])
