@@ -1,0 +1,13 @@
+Flask==2.2.3
+SQLAlchemy==2.0.10
+pyresparser==1.0.6
+spacy==3.5.2
+nltk==3.8.1
+scikit-learn==1.2.2
+pyenchant==3.2.2
+fitz==0.0.1
+PyMuPDF==1.22.1
+pandas==2.0.0
+joblib==1.2.0
+dateparser==1.1.8
+Flask-SQLAlchemy==3.0.3
