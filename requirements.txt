@@ -1,7 +1,7 @@
 Flask==2.2.3
 SQLAlchemy==2.0.10
 pyresparser==1.0.6
-spacy==3.5.2
+spacy==2.2.0
 nltk==3.8.1
 scikit-learn==1.2.2
 pyenchant==3.2.2
