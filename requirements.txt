@@ -1,6 +1,5 @@
 Flask==2.2.3
 SQLAlchemy==2.0.10
-pyresparser==1.0.6
 spacy==3.5.3
 nltk==3.8.1
 scikit-learn==1.2.2
@@ -9,13 +8,8 @@ fitz==0.0.1.dev2
 PyMuPDF==1.22.1
 pandas==2.0.0
 joblib==1.2.0
-dateparser==1.1.8
 Flask-SQLAlchemy==3.0.3
 Werkzeug==2.3.4
 regex==2023.5.5
-python-dateutil==2.8.2
-DateTime==5.1
-pdfminer==20191125
-scikit-learn==1.2.2
-joblib==1.2.0
-python-csv==0.0.13
+pdfminer.six==20221105
+PyPDF2==3.0.1
