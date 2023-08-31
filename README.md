@@ -17,7 +17,14 @@ So, we took the responsibility of solving our own problems.
 
 Here is the view of the app:
 
+# Home Page 
 
 ![Screenshot 2023-04-19 233019](https://user-images.githubusercontent.com/99025242/233205982-dd8082dd-3758-4a40-9b55-75c1aea8b386.png)
+
+# The job title and skills according to your resume
+
 ![Screenshot 2023-04-19 233113](https://user-images.githubusercontent.com/99025242/233205991-6108e1b2-2ee8-4750-89bb-bf1a9fe66a31.png)
+
+# Score of your resume
+
 ![Screenshot 2023-04-18 231142](https://user-images.githubusercontent.com/99025242/233205972-5b4fee98-39ec-40d0-8785-cf4f189c175d.png)
