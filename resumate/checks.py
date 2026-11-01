@@ -27,6 +27,8 @@ class Finding:
     summary: str
     evidence: list = field(default_factory=list)
     tip: str = ""
+    lines: list = field(default_factory=list)      # whole lines (or sentences) the check flagged, as written in the resume
+    words: list = field(default_factory=list)      # single words or phrases the check flagged
 
     @property
     def lost(self):
@@ -42,8 +44,9 @@ def ramp(x, zero_at, full_at):
     return clamp((x - zero_at) / (full_at - zero_at))
 
 
-def make(key, category, title, max_points, fraction, summary, evidence=(), tip=""):
-    return Finding(key, category, title, max_points, round(max_points * clamp(fraction), 1), summary, list(evidence)[:8], tip)
+def make(key, category, title, max_points, fraction, summary, evidence=(), tip="", lines=(), words=()):
+    return Finding(key, category, title, max_points, round(max_points * clamp(fraction), 1), summary, list(evidence)[:8], tip,
+                   list(lines), list(words))
 
 
 # --- Impact (30) ---------------------------------------------------------------------------
@@ -51,9 +54,9 @@ def make(key, category, title, max_points, fraction, summary, evidence=(), tip="
 YEAR = re.compile(r"\b(?:19|20)\d{2}\b")
 METRIC = re.compile(
     r"\d+(?:\.\d+)?\s?%|[$₹£€]\s?\d|\b\d+(?:\.\d+)?\s?(?:x|k|m|mn|bn|lakhs?|crores?|million|billion|thousand)\b"
-    r"|\b\d{1,3}(?:,\d{3})+\b|\b\d{2,}\+?\s+(?:users|customers|clients|students|members|employees|projects|requests|"
-    r"records|transactions|engineers|developers|stores|accounts|reports|models|tests|applications|apps|pages|"
-    r"visitors|downloads|orders|tickets|leads|people|teams|countries|cities|hours|days|weeks|months)\b"
+    r"|\b\d{1,3}(?:,\d{3})+\b|\b\d+\+?\s+(?:users|customers|clients|students|members|employees|projects|requests|"
+    r"records|transactions|engineers|developers|interns|agents|endpoints|stores|accounts|reports|models|tests|applications|"
+    r"apps|pages|visitors|downloads|orders|tickets|leads|people|teams|countries|cities|hours|days|weeks|months)\b"
     r"|\b\d+(?:\.\d+)?\s?(?:ms|seconds|minutes|hrs|hours)\b", re.IGNORECASE)
 
 
@@ -73,7 +76,7 @@ def quantified_results(doc):
     return make("quantified", "Impact", "Numbers that show results", 10, ramp(ratio, 0, 0.4),
                 f"{len(with_numbers)} of {len(lines)} achievement lines contain a result you can measure ({ratio:.0%}). "
                 f"Aim for at least 40%.", [f"No number: {s[:140]}" for s in missing],
-                "Add a figure to your lines: how much, how many, how fast, how often, or by what percentage.")
+                "Add a figure to your lines: how much, how many, how fast, how often, or by what percentage.", lines=missing)
 
 
 def strong_verbs(doc):
@@ -91,7 +94,7 @@ def strong_verbs(doc):
     return make("verbs", "Impact", "Strong opening verbs", 8, ramp(ratio, 0, 0.7),
                 f"{strong} of {len(lines)} achievement lines open with a strong action verb ({ratio:.0%}). Aim for at least 70%.",
                 [f"Opens with '{s.split()[0]}': {s[:120]}" for s in weak_open],
-                "Start each line with what you did, in the past tense: Built, Reduced, Led, Automated.")
+                "Start each line with what you did, in the past tense: Built, Reduced, Led, Automated.", lines=weak_open)
 
 
 def weak_phrases(doc):
@@ -102,14 +105,15 @@ def weak_phrases(doc):
     return make("weak", "Impact", "Vague phrases", 6, 1 - total / 4,
                 "No vague phrases found." if not total else f"{total} vague phrase(s) found.",
                 [f"'{p}' appears {n}x" for p, n in hits],
-                "Replace 'responsible for' or 'worked on' with the result you produced.")
+                "Replace 'responsible for' or 'worked on' with the result you produced.", words=[p for p, _ in hits])
 
 
 def repetition(doc):
-    seen, repeated = {}, []
+    seen, original = {}, {}
     for s in sentences(doc.text):
         key = re.sub(r"\W+", " ", s.lower()).strip()
         seen[key] = seen.get(key, 0) + 1
+        original.setdefault(key, s)
     repeated = [k for k, n in seen.items() if n > 1]
     starts = {}
     for s in statements(doc.text):
@@ -120,7 +124,7 @@ def repetition(doc):
     evidence = [f"Sentence repeated: {k[:120]}" for k in repeated] + [f"'{v}' starts {n} lines" for v, n in overused]
     return make("repetition", "Impact", "Repetition", 6, 1 - penalty / 4,
                 "No repeated sentences or overused opening verbs." if not evidence else f"{len(evidence)} repetition(s) found.",
-                evidence, "Say each thing once and vary your opening verbs.")
+                evidence, "Say each thing once and vary your opening verbs.", lines=[original[k] for k in repeated])
 
 
 # --- Brevity (20) --------------------------------------------------------------------------
@@ -149,7 +153,8 @@ def line_length(doc):
     fraction = 1.0 if 8 <= median <= 28 else (ramp(median, 3, 8) if median < 8 else ramp(median, 45, 28))
     return make("line_length", "Brevity", "Achievement line length", 4, fraction,
                 f"The typical achievement line is {median:.0f} words. 8 to 28 reads best.",
-                [f"{len(s.split())} words: {s[:110]}..." for s in too_long], "Split long lines in two; expand very short ones.")
+                [f"{len(s.split())} words: {s[:110]}..." for s in too_long], "Split long lines in two; expand very short ones.",
+                lines=too_long)
 
 
 def line_count(doc):
@@ -170,14 +175,14 @@ def passive_voice(doc):
     hits = [s for s in sentences(doc.text) if PASSIVE.search(s) and not NOT_PASSIVE.search(s)]
     return make("passive", "Style", "Passive voice", 5, 1 - len(hits) / 5,
                 "No passive sentences found." if not hits else f"{len(hits)} sentence(s) are in the passive voice.",
-                [s[:140] for s in hits], "Say who did it: 'Built the API' instead of 'The API was built'.")
+                [s[:140] for s in hits], "Say who did it: 'Built the API' instead of 'The API was built'.", lines=hits)
 
 
 def pronouns(doc):
     found = re.findall(r"\b(?:I|me|my|mine|myself)\b", doc.text)
     return make("pronouns", "Style", "First-person words", 4, 1 - len(found) / 4,
                 "No 'I', 'me' or 'my' found." if not found else f"{len(found)} first-person word(s): {', '.join(sorted(set(found)))}.",
-                tip="Resumes leave out 'I' and 'my'; start with the verb.")
+                tip="Resumes leave out 'I' and 'my'; start with the verb.", words=sorted(set(found)))
 
 
 def cliches(doc):
@@ -185,7 +190,7 @@ def cliches(doc):
     hits = [p for p in CLICHES if re.search(r"\b" + re.escape(p) + r"\b", text)]
     return make("cliches", "Style", "Stock phrases", 6, 1 - len(hits) / 4,
                 "No stock phrases found." if not hits else f"{len(hits)} stock phrase(s) found.", [f"'{p}'" for p in hits],
-                "Show the quality with an example instead of naming it.")
+                "Show the quality with an example instead of naming it.", words=hits)
 
 
 @lru_cache(maxsize=1)
@@ -204,7 +209,8 @@ def spelling(doc):
     shown = sorted(set(wrong))
     return make("spelling", "Style", "Spelling", 6, ramp(rate, 0.06, 0.01),
                 f"{len(shown)} possible misspelling(s) in {len(candidates)} lower-case words ({rate:.1%}).",
-                [f"'{w}' (maybe '{checker.correction(w)}')" for w in shown[:8]], "Check these words; proper names and tools may be false alarms.")
+                [f"'{w}' (maybe '{checker.correction(w)}')" for w in shown[:8]], "Check these words; proper names and tools may be false alarms.",
+                words=shown)
 
 
 DATE_FORMATS = [

@@ -4,6 +4,7 @@ A resume analysis tool. Upload a resume and get a score out of 100 with the exac
 
 ## What it has
 
+- **A report you can read at a glance:** an animated score ring that counts up, a ring for each category, and a "quick wins" list ranked by points gained. Your resume sits on the right of the screen with every flagged line highlighted and the exact words underlined; opening a finding, or clicking a quick win, dims everything else and scrolls to its lines. A PDF can also be viewed as uploaded, from the browser's own copy of the file. Dark and light themes follow the device, and the layout adapts to phones.
 - **Score out of 100 from 18 checks** in four categories: Impact 30, Brevity 20, Style 25, Sections 25. Every check returns its points, the evidence (the actual lines it flagged) and a fix tip. Points are earned in proportion, so a small improvement always moves the score.
   - Impact: numbers that show results, strong opening verbs, vague phrases, repetition.
   - Brevity: word count, pages, achievement line length, number of achievement lines.
@@ -39,7 +40,7 @@ On unseen resumes the chosen model has 78.5% macro-F1, and the right role is amo
 
 | Measure | Result |
 |---|---|
-| Robustness | All 167 unique dataset resumes scored with no failures, 123 ms each |
+| Robustness | All 167 unique dataset resumes scored with no failures, 117 ms each |
 | Same resume, three formats | Identical score as text, Word and PDF |
 | Deliberate damage to a strong sample resume (96.0) | Every one of 7 changes lowers the score: cut to 12 lines −25.5, section headings removed −17.2, numbers removed −16.9, contact details removed −8.3, stock phrases added −5.5, vague wording −4.3, first person −3.8 |
 | Weak sample resume | 44.5 |
@@ -61,12 +62,12 @@ On unseen resumes the chosen model has 78.5% macro-F1, and the right role is amo
 
 | Path | Contents |
 |---|---|
-| `app.py`, `templates/`, `static/` | Flask app, pages and styles |
+| `app.py`, `templates/`, `static/` | Flask app, pages, styles and the front-end script (upload without leaving the page, loading screen, score count-up, highlight focus) |
 | `resumate/extract.py` | Reads PDF, Word and text from bytes |
 | `resumate/checks.py`, `scoring.py` | The 18 checks and the score |
-| `resumate/textutils.py`, `wordlists.py` | Sections, achievement lines, word lists |
+| `resumate/textutils.py`, `wordlists.py`, `highlight.py` | Sections, achievement lines, word lists, marking flagged lines and words for display |
 | `resumate/skills.py`, `jobmatch.py`, `roles.py` | Skill detection, job match, role model |
 | `data/` | Resume dataset, skill vocabulary and the two skill lists it is built from |
 | `scripts/build_skills.py` | Builds the skill vocabulary |
 | `evaluation/` | The evaluation, its results and figure, and three of the original checks it compares with |
-| `tests/` | 70 tests: each check, file reading, scoring and damage, job match, role model, and the app including errors, escaping and no stored files |
+| `tests/` | 75 tests: each check, file reading, scoring and damage, highlighting, job match, role model, and the app including errors, escaping and no stored files |

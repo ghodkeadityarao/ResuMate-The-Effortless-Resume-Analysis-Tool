@@ -48,3 +48,7 @@ def statements(text):
 
 def sentences(text):
     return [s.strip() for s in re.split(r"(?<=[.!?])\s+|\n+", text) if len(s.split()) >= 3]
+
+
+def is_heading(line):
+    return bool(_HEADING_START.match(line.strip()))

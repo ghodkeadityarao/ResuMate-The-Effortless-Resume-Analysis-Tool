@@ -42,8 +42,8 @@
   "scoring": {
     "dataset_resumes_scored": 167,
     "failures": 0,
-    "ms_per_resume": 123.2,
-    "dataset_score_mean": 49.8,
+    "ms_per_resume": 117.1,
+    "dataset_score_mean": 50.1,
     "dataset_score_min": 24.5,
     "dataset_score_max": 69.0,
     "strong_sample": 96.0,

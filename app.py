@@ -6,12 +6,20 @@ Nothing is stored: an upload is read in memory, analysed and forgotten, and no s
 """
 from flask import Flask, jsonify, render_template, request
 
-from resumate import jobmatch, roles
+from resumate import highlight, jobmatch, roles
 from resumate.checks import CATEGORIES
 from resumate.extract import MAX_BYTES, UnreadableFile, read_document
 from resumate.scoring import analyze
 
 MAX_JOB_CHARS = 20000
+
+
+def band(score):
+    """(css class, label) for a score out of 100."""
+    for floor, cls, label in ((85, "strong", "Strong"), (70, "good", "Good"), (50, "fair", "Getting there")):
+        if score >= floor:
+            return cls, label
+    return "poor", "Needs work"
 
 
 def run_analysis(upload, job_text):
@@ -21,7 +29,9 @@ def run_analysis(upload, job_text):
     doc = read_document(upload.filename, upload.read(MAX_BYTES + 1))
     report = analyze(doc)
     ranked, confident = roles.model().predict(doc.text)
+    band_class, band_label = band(report.total)
     result = {"report": report, "roles": ranked, "confident": confident, "filename": upload.filename,
+              "lines": highlight.render(doc.text, report.findings), "band_class": band_class, "band_label": band_label,
               "missing_skills": roles.model().missing_skills(ranked[0][0], doc.text) if confident else [], "job": None}
     job_text = (job_text or "").strip()[:MAX_JOB_CHARS]
     if job_text:
@@ -51,11 +61,15 @@ def create_app():
 
     @app.post("/analyze")
     def analyze_page():
+        wants_fragment = request.headers.get("X-Requested-With") == "fetch"      # sent by static/app.js
         try:
             result = run_analysis(request.files.get("resume"), request.form.get("job"))
         except (UnreadableFile, ValueError) as e:
-            return render_template("index.html", error=str(e)), 400
-        return render_template("report.html", categories=CATEGORIES, **result)
+            if wants_fragment:
+                return jsonify(error=str(e)), 400
+            return render_template("index.html", error=str(e), job_text=request.form.get("job")), 400
+        page = "_report.html" if wants_fragment else "report.html"
+        return render_template(page, categories=CATEGORIES, **result)
 
     @app.post("/api/analyze")
     def analyze_api():

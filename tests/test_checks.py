@@ -98,3 +98,9 @@ def test_section_headings_are_recognised_in_any_case(check, heading):
 
 def test_inline_heading_with_a_colon_counts():
     assert skills_section(doc("Skills: Python, SQL, Docker")).score > 0
+
+
+def test_small_counts_with_a_noun_are_results_too():
+    f = quantified_results(doc(bullets("Led a team of 4 engineers on the migration", "Mentored 3 interns each summer",
+                                       "Handled the team for the project", "Kept the build green every week")))
+    assert "2 of 4" in f.summary

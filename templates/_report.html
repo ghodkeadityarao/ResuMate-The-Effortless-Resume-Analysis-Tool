@@ -1,0 +1,105 @@
+{% set s = report.total %}
+<a class="back" href="{{ url_for('index') }}">← Analyse another resume</a>
+<div class="split" data-score="{{ s }}">
+  <div class="left">
+
+    <section class="card summary rise {{ band_class }}">
+      <div class="gauge">
+        <svg viewBox="0 0 120 120" aria-hidden="true">
+          <defs><linearGradient id="gaugeGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--ra)"/><stop offset="1" style="stop-color:var(--rb)"/></linearGradient></defs>
+          <circle class="track" cx="60" cy="60" r="52"/>
+          <circle class="arc" cx="60" cy="60" r="52" style="stroke-dashoffset: {{ (326.73 * (1 - s / 100)) | round(2) }}"/>
+        </svg>
+        <div class="mid"><div class="num" data-count="{{ s | round | int }}">{{ s | round | int }}</div><div class="of">/ 100</div></div>
+      </div>
+      <div>
+        <span class="band {{ band_class }}">{{ band_label }}</span>
+        <h2 style="margin-top:8px;font-size:1.25rem">{{ filename }}</h2>
+        <div class="stats"><span><b>{{ report.words }}</b> words</span><span><b>{{ report.pages }}</b> page{{ '' if report.pages == 1 else 's' }}</span><span><b>{{ report.skills | length }}</b> skills found</span></div>
+        <div class="cats">
+          {% for name, (score, max) in report.categories.items() %}
+          {% set frac = score / max %}
+          <div class="cat {{ 'strong' if frac >= 0.85 else 'good' if frac >= 0.7 else 'fair' if frac >= 0.5 else 'poor' }}">
+            <div class="mini"><svg viewBox="0 0 52 52" aria-hidden="true"><circle class="track" cx="26" cy="26" r="22"/><circle class="arc" cx="26" cy="26" r="22" style="stroke-dashoffset: {{ (138.23 * (1 - frac)) | round(2) }}"/></svg><div class="v">{{ (100 * frac) | round | int }}</div></div>
+            <div class="n">{{ name }}</div><div class="s">{{ score | round(1) }} / {{ max }}</div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    {% set gains = report.biggest_gains() %}
+    {% if gains %}
+    <section class="card wins rise" style="animation-delay:.1s">
+      <h2>⚡ Quick wins</h2>
+      {% for f in gains %}
+      <button class="win" type="button" data-open="{{ f.key }}"><span class="pts">+{{ f.lost | round(1) }}</span><div><b>{{ f.title }}</b><span>{{ f.tip or f.summary }}</span></div></button>
+      {% endfor %}
+    </section>
+    {% endif %}
+
+    {% if job %}
+    <section class="card rise {{ 'strong' if job.match_percent >= 75 else 'good' if job.match_percent >= 55 else 'fair' if job.match_percent >= 35 else 'poor' }}" style="animation-delay:.15s">
+      <h2>🎯 Match with the job post</h2>
+      <div class="matchhead">
+        <div class="mini"><svg viewBox="0 0 52 52" aria-hidden="true"><circle class="track" cx="26" cy="26" r="22"/><circle class="arc" cx="26" cy="26" r="22" style="stroke-dashoffset: {{ (138.23 * (1 - job.match_percent / 100)) | round(2) }}"/></svg><div class="v">{{ job.match_percent }}%</div></div>
+        <div class="muted small">Match with the job post: {{ job.match_percent }}%<br>{% if job.skill_share is not none %}Skills {{ job.skill_share }}% covered · {% endif %}Keywords {{ job.keyword_share }}% covered</div>
+      </div>
+      {% if job.skills_found %}<div class="sub">Skills the post names that your resume has</div><div class="chips">{% for x in job.skills_found %}<span class="chip have">{{ x }}</span>{% endfor %}</div>{% endif %}
+      {% if job.skills_missing %}<div class="sub">Skills the post names that your resume does not mention</div><div class="chips">{% for x in job.skills_missing %}<span class="chip miss">{{ x }}</span>{% endfor %}</div>{% endif %}
+      {% if job.keywords_missing %}<div class="sub">Other important words from the post that are missing</div><div class="chips">{% for x in job.keywords_missing %}<span class="chip miss">{{ x }}</span>{% endfor %}</div>{% endif %}
+    </section>
+    {% endif %}
+
+    <section class="card bars rise" style="animation-delay:.2s">
+      <h2>🧭 Roles this resume fits</h2>
+      {% if confident %}
+        {% for name, p in roles %}<div class="row"><span>{{ name }}</span><b>{{ (100 * p) | round | int }}%</b></div><div class="bar"><i style="width: {{ [100 * p, 3] | max }}%"></i></div>{% endfor %}
+        {% if missing_skills %}<div class="sub" style="margin-top:14px">Skills common in {{ roles[0][0] }} resumes that yours does not mention</div><div class="chips">{% for x, share in missing_skills %}<span class="chip">{{ x }}</span>{% endfor %}</div>{% endif %}
+      {% else %}
+        <p class="muted" style="margin:0">Not sure. The closest roles are {{ roles | map(attribute=0) | join(', ') }}, but none stands out. A longer resume with a skills section helps.</p>
+      {% endif %}
+    </section>
+
+    {% for category, points in categories.items() %}
+    {% set got = report.categories[category][0] %}
+    <section class="card catblock rise" style="animation-delay:.25s">
+      <h2>{{ category }} <span>{{ got | round(1) }} / {{ points }}</span></h2>
+      {% for f in report.findings if f.category == category %}
+      <details class="f" data-key="{{ f.key }}">
+        <summary data-key="{{ f.key }}">
+          <i class="dot {{ '' if f.lost < 0.5 else ('bad' if f.score == 0 else 'mid') }}"></i><h3>{{ f.title }}</h3><span class="pt">{{ f.score | round(1) }} / {{ f.max_points | round(1) }}</span>
+          <div class="fbar"><div class="bar"><i style="width: {{ 100 * f.score / f.max_points }}%"></i></div></div>
+        </summary>
+        <div class="fbody">
+          <div class="muted small">{{ f.summary }}</div>
+          {% if f.lost >= 0.5 and f.tip %}<p class="tip">💡 {{ f.tip }}</p>{% endif %}
+          {% if f.evidence %}<ul>{% for e in f.evidence %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+          {% if f.lines or f.words %}<button class="show" type="button" data-show="{{ f.key }}">Show in my resume →</button>{% endif %}
+        </div>
+      </details>
+      {% endfor %}
+    </section>
+    {% endfor %}
+
+    <section class="card rise" style="animation-delay:.3s">
+      <h2>🛠 Skills found in your resume</h2>
+      {% if report.skills %}<div class="chips">{% for x, n in report.skills[:60] %}<span class="chip">{{ x }}</span>{% endfor %}</div>
+      {% else %}<p class="muted small" style="margin:0">No known skills were recognised.</p>{% endif %}
+    </section>
+  </div>
+
+  <aside class="right">
+    <div class="doc" id="doc">
+      <div class="dochead">
+        <div><b>{{ filename }}</b><span class="muted small">Your resume</span></div>
+        <div class="tabs" id="tabs"><button type="button" class="on" data-tab="text">Highlights</button><button type="button" data-tab="pdf" id="pdfTab" hidden>Original</button></div>
+      </div>
+      <div class="legend"><span><i></i>Lines to improve</span><a id="clearFocus" hidden>Show all</a></div>
+      <div class="docbody" id="docbody">
+        {% for l in lines %}<div class="line{{ ' hit' if l.flags }}{{ ' h' if l.heading }}" data-flags="{{ l.flags }}">{{ l.html }}{{ '' if not l.blank else ' ' }}</div>{% endfor %}
+      </div>
+      <iframe class="pdfview" id="pdfview" title="Your resume as uploaded"></iframe>
+    </div>
+  </aside>
+</div>

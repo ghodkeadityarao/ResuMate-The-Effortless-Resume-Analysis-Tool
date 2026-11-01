@@ -1,24 +1,33 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ResuMate · Resume analysis</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-<main>
-  <h1>ResuMate</h1>
-  <p class="sub">Upload a resume to get a score out of 100, the fixes that gain the most points, suggested roles, and how well it matches a job post.</p>
-  <form class="card" method="post" action="{{ url_for('analyze_page') }}" enctype="multipart/form-data">
-    <label for="resume">Resume (PDF, Word .docx or text, up to 5 MB)</label>
+{% extends "layout.html" %}
+{% block content %}
+<section class="hero">
+  <h1>Is your resume <span class="grad">ready to be read?</span></h1>
+  <p>Get a score out of 100, see the exact lines that lose points, find the roles you fit, and check your match against a job post.</p>
+</section>
+
+<form class="upload rise" id="form" method="post" action="{{ url_for('analyze_page') }}" enctype="multipart/form-data">
+  <label class="drop" id="drop" for="resume">
+    <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 40h20a4 4 0 0 0 4-4V16L28 6H14a4 4 0 0 0-4 4v26a4 4 0 0 0 4 4z"/><path d="M28 6v10h10"/><path d="M24 33V22m-5 5 5-5 5 5"/></svg>
+    <b>Drop your resume here, or click to browse</b>
+    <span>PDF, Word (.docx) or text · up to 5 MB</span>
     <input id="resume" type="file" name="resume" accept=".pdf,.docx,.txt" required>
-    <label for="job">Job description (optional, to see how well the resume matches it)</label>
-    <textarea id="job" name="job" placeholder="Paste the job post here"></textarea>
-    <button type="submit">Analyse resume</button>
-    <p class="note">Your file is read in memory and not stored.</p>
-  </form>
-  {% if error %}<div class="card error">{{ error }}</div>{% endif %}
-</main>
-</body>
-</html>
+  </label>
+  <div class="picked" id="picked"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10l4 4 8-9"/></svg><span id="pickedName"></span></div>
+
+  <details class="job" {{ 'open' if job_text }}>
+    <summary>Add a job post to see how well you match it (optional)</summary>
+    <textarea name="job" placeholder="Paste the job description here">{{ job_text or '' }}</textarea>
+  </details>
+
+  <button class="go" id="go" type="submit"><span class="btnspin"></span><span id="gotext">Analyse my resume</span></button>
+  <div class="err" id="error" {{ '' if error else 'hidden' }}>{{ error or '' }}</div>
+  <p class="muted small" style="margin:12px 0 0;text-align:center">Upload a resume to start. Your file is read in memory and never stored.</p>
+</form>
+
+<section class="feats">
+  <div class="feat rise"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></i><h3>Score with proof</h3><p>18 checks across impact, brevity, style and sections, each tied to the lines it flagged.</p></div>
+  <div class="feat rise" style="animation-delay:.08s"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 3v3m0 12v3M3 12h3m12 0h3"/></svg></i><h3>Job-post match</h3><p>See which skills and keywords of a posting your resume covers, and which it misses.</p></div>
+  <div class="feat rise" style="animation-delay:.16s"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10m6 10V4m6 16v-7m4 7H2"/></svg></i><h3>Role fit</h3><p>The roles your resume reads like, and the skills people in those roles list that you do not.</p></div>
+</section>
+<p class="privacy">No account, no storage. Checks use rules and word lists, not a language model.</p>
+{% endblock %}
