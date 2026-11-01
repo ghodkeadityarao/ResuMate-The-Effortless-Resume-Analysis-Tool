@@ -1,0 +1,80 @@
+{
+  "seed": 0,
+  "roles": {
+    "rows_in_file": 962,
+    "unique_resumes": 167,
+    "after_removing_near_duplicates": 166,
+    "roles": 25,
+    "smallest_role_size": 3,
+    "random_split_of_the_file": {
+      "knn": 97.4,
+      "logistic": 100.0,
+      "test_resumes_also_in_training_pct": 98.4
+    },
+    "unseen_resume_cross_validation": {
+      "folds": 3,
+      "repeats": 5,
+      "knn": {
+        "accuracy": 80.8,
+        "macro_f1": 76.1
+      },
+      "logistic": {
+        "accuracy": 83.6,
+        "macro_f1": 78.5,
+        "top3_accuracy": 95.1
+      },
+      "logistic_accuracy_std": 5.2
+    },
+    "chosen_min_confidence": 0.15,
+    "at_chosen_threshold": {
+      "min_confidence": 0.15,
+      "answered_pct": 67.6,
+      "accuracy_when_answered_pct": 92.7
+    },
+    "most_common_mistakes": {
+      "Web Designing -> Java Developer": 13,
+      "DevOps Engineer -> Database": 7,
+      "SAP Developer -> Database": 6,
+      "DevOps Engineer -> Java Developer": 6,
+      "PMO -> DevOps Engineer": 6
+    }
+  },
+  "scoring": {
+    "dataset_resumes_scored": 167,
+    "failures": 0,
+    "ms_per_resume": 123.2,
+    "dataset_score_mean": 49.8,
+    "dataset_score_min": 24.5,
+    "dataset_score_max": 69.0,
+    "strong_sample": 96.0,
+    "weak_sample": 44.5,
+    "same_score_in_text_docx_pdf": true,
+    "damage_tests": {
+      "contact details removed": 8.3,
+      "all numbers removed": 16.9,
+      "section headings removed": 17.2,
+      "vague wording": 4.3,
+      "stock phrases added": 5.5,
+      "first person ('I', 'my')": 3.8,
+      "cut to the first 12 lines": 25.5
+    },
+    "damage_tests_all_lower_pct": 100.0
+  },
+  "original_checks": {
+    "resumes": 167,
+    "buzzword_check_scored_zero_pct": 43.1,
+    "length_check_scored_zero_pct": 71.3,
+    "numbers_check_scored_zero_pct": 82.6,
+    "note": "the original skills check returned 5 for every resume"
+  },
+  "job_match": {
+    "resumes": 100,
+    "posts_per_resume": 25,
+    "mean_match_own_role_pct": 33.2,
+    "mean_match_other_roles_pct": 11.2,
+    "own_role_post_scores_higher_pct": 89.4,
+    "tied_pct": 5.6,
+    "own_role_post_ranked_first_pct": 55.0,
+    "note": "posts are synthetic: the 25 skills most common in the other resumes of each role"
+  }
+}

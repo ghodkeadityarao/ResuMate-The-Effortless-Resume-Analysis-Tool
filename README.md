@@ -1,41 +1,72 @@
-# ResuMate-The-Effortless-Resume-Analysis-Tool
+# ResuMate
 
-## Introduction 
+A resume analysis tool. Upload a resume and get a score out of 100 with the exact lines behind each point lost, the fixes that gain the most, the roles it fits, and, if you paste a job post, how well it matches. It uses rules, word lists and classic text statistics only: no language model and no neural network.
 
-- ResuMate is a project to create a technology-based solution that provides personalized feedback and guidance to job seekers, helping them to improve their resumes and increase their chances of being selected for an interview.
-- In today’s era, a lot of students fill in their resumes with irrelevant skills and skills which aren’t in the trend.
-- Practically, when companies review the applicant’s resume, they reject all the poor resumes giving no feedback or suggestions to the applicants.
-- So we have come up with this idea, that will assist students in knowing whether their resumes are appropriate for their desired jobs.
-- Also, as the project is student-oriented, if a student is in the confusion about selecting a job profile for himself, our software can also assist in suggesting convenient job profiles by reviewing his resume.
+## What it has
 
-## Problem Statement
+- **Score out of 100 from 18 checks** in four categories: Impact 30, Brevity 20, Style 25, Sections 25. Every check returns its points, the evidence (the actual lines it flagged) and a fix tip. Points are earned in proportion, so a small improvement always moves the score.
+  - Impact: numbers that show results, strong opening verbs, vague phrases, repetition.
+  - Brevity: word count, pages, achievement line length, number of achievement lines.
+  - Style: passive voice, first-person words, stock phrases, spelling, date consistency.
+  - Sections: contact details, education, experience or projects, skills, summary.
+- **Job-post match:** paste a job description to see a match percentage, the skills and keywords the resume covers and the ones it lacks.
+- **Role suggestions:** the top three roles from 25, with a confidence, and the skills common in that role's resumes that yours does not mention. It says "not sure" when confidence is low.
+- **Skill detection:** a vocabulary of about 37,000 skills, matched as exact phrases (including `C++`, `C#`, `Node.js`).
+- **Formats:** PDF, Word (.docx) and plain text up to 5 MB, recognised by content. Scanned images, password-protected PDFs and old `.doc` files get a plain message saying what to do.
+- **Private and stateless:** a file is read in memory, analysed and forgotten. Nothing is written to disk, nothing is shared between visitors, and there is no login or stored password.
+- **Web page and JSON API** (`POST /api/analyze`).
 
-- In today’s fast-moving world, the recruitment process for a job is no non-sense and quick. Your resume becomes a make-or-break deal for getting the job.
-- We, as a team, share a common confusion about ways to build the quality of our resume- what skills to include, whether hackathon participation mentions are necessary, how long should the skill descriptions be, etc.
-- When we surfed the internet for resolving our issue, surprisingly, there were very few convenient resume-building tools. So, we took the responsibility of solving our own problems.
+## How it works
 
-Here is the view of the app:
+- **Checks:** regular expressions (numbers, dates, contact details), word lists (strong verbs, vague phrases, stock phrases), heading detection for sections, and a dictionary spell check that ignores tools and URLs. Passive voice is a rule: a form of "to be" followed by a past participle.
+- **Job match:** TF-IDF weights, learnt from the resume dataset so everyday resume words count for little, pick the heaviest words and word pairs of the post. The match is a weighted share of the post's skills and keywords found in the resume.
+- **Role model:** TF-IDF and logistic regression, trained at start-up on the unique resumes of `data/resume_dataset.csv`. Repeated and near-identical resumes are removed first.
 
-# Home Page 
+## Results
 
-![Screenshot 2023-04-19 233019](https://user-images.githubusercontent.com/99025242/233205982-dd8082dd-3758-4a40-9b55-75c1aea8b386.png)
+All numbers come from `evaluation/`; the output is in `evaluation/results/`.
 
-# The job title and skills according to your resume
+**Role model.** The dataset has 962 rows but only 167 unique resumes (166 after removing near-identical ones), over 25 roles.
 
-![Screenshot 2023-04-19 233113](https://user-images.githubusercontent.com/99025242/233205991-6108e1b2-2ee8-4750-89bb-bf1a9fe66a31.png)
+| Test | TF-IDF + k-nearest neighbours | TF-IDF + logistic regression |
+|---|---|---|
+| Random split of the file as it is (98.4% of test resumes also appear in training) | 97.4% | 100% |
+| Unseen resumes (3-fold cross-validation repeated 5 times, unique resumes only) | 80.8% | **83.6%** (±5.2 between folds) |
 
-# Score of your resume
+On unseen resumes the chosen model has 78.5% macro-F1, and the right role is among its top three 95.1% of the time. With the "not sure" threshold at 15% confidence it answers 67.6% of resumes and is right 92.7% of the time when it does. The commonest mistakes are Web Designing read as Java Developer, and DevOps Engineer read as Database or Java Developer. With 166 resumes and a smallest role of 3, these estimates are rough.
 
-![Screenshot 2023-04-18 231142](https://user-images.githubusercontent.com/99025242/233205972-5b4fee98-39ec-40d0-8785-cf4f189c175d.png)
+**Scoring.**
 
-## How to Use:
-1. Clone this repository: git clone command
-2. Navigate to specific directories of interest.
-3. Set Up a Virtual Environment (optional but recommended): python -m venv venv
-4. Activate the Virtual Environment:
-   For Windows: venv\Scripts\activate
-   For macOS and Linux: source venv/bin/activate
-5. Install Dependencies: pip install -r requirements.txt
-6. Run the Flask Application: flask run
-7. Access the Application: Open a web browser and go to http://127.0.0.1:5000/ or http://localhost:5000/ to interact with the Flask application.
+| Measure | Result |
+|---|---|
+| Robustness | All 167 unique dataset resumes scored with no failures, 123 ms each |
+| Same resume, three formats | Identical score as text, Word and PDF |
+| Deliberate damage to a strong sample resume (96.0) | Every one of 7 changes lowers the score: cut to 12 lines −25.5, section headings removed −17.2, numbers removed −16.9, contact details removed −8.3, stock phrases added −5.5, vague wording −4.3, first person −3.8 |
+| Weak sample resume | 44.5 |
 
+**Original checks.** On the 167 unique dataset resumes the original buzzword check scored zero for 43.1% (it penalised strong verbs and matched words like "a" and "on"), the length check scored zero for 71.3%, and the numbers check scored zero for 82.6%. The original skills check returned 5 for every resume.
+
+**Job match.** For 100 resumes, each compared with 25 synthetic posts (the skills most common in each role's other resumes), the post of the resume's own role scored higher than another role's post in 89.4% of comparisons (5.6% ties) and ranked first among all 25 for 55% of resumes. Mean match was 33.2% for the own role against 11.2% for the others.
+
+## Limits
+
+- The score is built from widely used resume rules of thumb. It has not been validated against hiring decisions and does not model any particular applicant tracking system.
+- The dataset resumes are anonymised (no names or contact details), so they score low on contact details and are used to test robustness, not to calibrate the score.
+- The role model learned from 166 mostly technical resumes in 25 roles. It is English only, and other fields are not covered.
+- The job match counts words and skills; it does not understand meaning. Its test uses synthetic posts, not real ones.
+- The skill vocabulary comes from older lists plus a short list of added tools, so it is noisy for some terms.
+- The spell check uses US English and flags British spellings. Resumes with columns or graphics may have text read in an odd order. Layout and design are not judged.
+
+## Repository
+
+| Path | Contents |
+|---|---|
+| `app.py`, `templates/`, `static/` | Flask app, pages and styles |
+| `resumate/extract.py` | Reads PDF, Word and text from bytes |
+| `resumate/checks.py`, `scoring.py` | The 18 checks and the score |
+| `resumate/textutils.py`, `wordlists.py` | Sections, achievement lines, word lists |
+| `resumate/skills.py`, `jobmatch.py`, `roles.py` | Skill detection, job match, role model |
+| `data/` | Resume dataset, skill vocabulary and the two skill lists it is built from |
+| `scripts/build_skills.py` | Builds the skill vocabulary |
+| `evaluation/` | The evaluation, its results and figure, and three of the original checks it compares with |
+| `tests/` | 70 tests: each check, file reading, scoring and damage, job match, role model, and the app including errors, escaping and no stored files |

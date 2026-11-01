@@ -1,0 +1,4 @@
+-r requirements.txt
+pytest>=8.0
+fpdf2>=2.7
+matplotlib>=3.8
