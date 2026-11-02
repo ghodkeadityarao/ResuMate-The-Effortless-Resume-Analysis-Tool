@@ -1,4 +1,4 @@
-# ResuMate
+# ResuMate: The Effortless Resume Analysis Tool
 
 A resume analysis tool. Upload a resume and get a score out of 100 with the exact lines behind each point lost, the fixes that gain the most, the roles it fits, and, if you paste a job post, how well it matches. It uses rules, word lists and classic text statistics only: no language model and no neural network.
 
